@@ -378,6 +378,15 @@ background-color: black;
     color: red;
 }
 
+.mensaje-compra {
+    font-size: 14px;
+    margin: 0;
+    color: white;
+    font-family: Verdana, Tahoma, sans-serif;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
 
    
 

@@ -1,5 +1,3 @@
-
-
 class Trago {
     constructor(nombre, precio) {
         this.nombre = nombre;
@@ -16,7 +14,7 @@ let lista = [
     new Trago("Botella de Agua", 1800),
 ];
 
-let saldo_usuario = parseFloat(sessionStorage.getItem("saldo"))
+let saldo_usuario = parseFloat(sessionStorage.getItem("saldo"));
 let total = 0;
 let saldoDisplay = document.querySelector(".p_barra");
 const listTragos = document.querySelector("#lista");
@@ -24,8 +22,14 @@ const listSeleccion = document.querySelector("#carrito");
 const pagar_btn = document.querySelector(".btn_barra1");
 let carrito = {};
 
+const mensajeCompra = document.createElement("p");
+mensajeCompra.className = "mensaje-compra";
+mensajeCompra.style.display = "none";
+
+document.querySelector(".btns_barra").insertBefore(mensajeCompra, document.querySelector(".btn_barra1"));
+
 window.addEventListener("DOMContentLoaded", () => {
-    let nombre_usuario = sessionStorage.getItem("nombre")
+    let nombre_usuario = sessionStorage.getItem("nombre");
     saldoDisplay.innerHTML = saldoDisplay.innerHTML
         .replace("(Saldo)", saldo_usuario)
         .replace("(Nombre)", nombre_usuario);
@@ -54,11 +58,7 @@ const actualizarCarrito = () => {
 };
 
 const addSeleccion = (trago) => {
-    if (carrito[trago.nombre]) {
-        carrito[trago.nombre].cantidad++;
-    } else {
-        carrito[trago.nombre] = { ...trago, cantidad: 1 };
-    }
+    carrito[trago.nombre] ? carrito[trago.nombre].cantidad++ : carrito[trago.nombre] = { ...trago, cantidad: 1 };
     actualizarCarrito();
 };
 
@@ -89,15 +89,18 @@ pagar_btn.addEventListener("click", () => {
     total = Object.values(carrito).reduce((acc, { cantidad, precio }) => acc + (cantidad * precio), 0);
 
     if (total > saldo_usuario) {
-        alert("No tienes suficiente saldo para pagar.");
-        return;
+        mensajeCompra.textContent = "No tienes suficiente saldo para pagar.";
+        mensajeCompra.style.color = "red";
+        mensajeCompra.style.display = "block";
+    } else {
+        saldo_usuario -= total;
+        sessionStorage.setItem("saldo", saldo_usuario);
+        mensajeCompra.textContent = `Pago realizado. Nuevo saldo: $${saldo_usuario}`;
+        mensajeCompra.style.color = "green";
+        mensajeCompra.style.display = "block";
+        carrito = {};
+        actualizarCarrito();
+        saldoDisplay.innerHTML = `Saldo de ${sessionStorage.getItem("nombre")}: $${saldo_usuario}`;
     }
-
-    saldo_usuario -= total;
-    sessionStorage.setItem("saldo", saldo_usuario);
-    alert(`Pago realizado. Nuevo saldo: $${saldo_usuario}`);
-
-    carrito = {};
-    actualizarCarrito();
-    saldoDisplay.innerHTML = `Saldo de ${sessionStorage.getItem("nombre")}: $${saldo_usuario}`;
 });
+
