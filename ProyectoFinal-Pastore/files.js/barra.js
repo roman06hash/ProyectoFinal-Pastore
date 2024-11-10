@@ -98,9 +98,24 @@ pagar_btn.addEventListener("click", () => {
         mensajeCompra.textContent = `Pago realizado. Nuevo saldo: $${saldo_usuario}`;
         mensajeCompra.style.color = "green";
         mensajeCompra.style.display = "block";
+
+        let itemsComprados = Object.entries(carrito).map(
+            ([nombre, { cantidad }]) => `${cantidad} x ${nombre}`
+        ).join(", ");
+
+        Toastify({
+            text: `Has comprado: ${itemsComprados}`,
+            duration: 1800,
+            close: true,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "linear-gradient(to right, black, orange)",
+            },
+        }).showToast();
+
         carrito = {};
         actualizarCarrito();
         saldoDisplay.innerHTML = `Saldo de ${sessionStorage.getItem("nombre")}: $${saldo_usuario}`;
     }
 });
-

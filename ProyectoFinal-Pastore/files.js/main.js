@@ -1,3 +1,4 @@
+
 let nombre_cliente = "";
 let input_name = document.querySelector("#name");
 
@@ -19,7 +20,6 @@ formulario_name.addEventListener("submit", (e) => {
     isNaN(nombre_cliente) ? (mensaje.style.display = "none", window.location.href = "./entrada2.html") :
         (mensaje.style.display = "block");
 });
-
 
 
 
